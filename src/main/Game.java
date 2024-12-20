@@ -2,6 +2,9 @@ package main;
 
 import inputs.KeyBoradListener;
 import inputs.MyMouseListener;
+import scene.Menu;
+import scene.Playing;
+import scene.Settings;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -25,17 +28,29 @@ public class Game extends JFrame implements Runnable {
     private MyMouseListener myMouseListener;
     private KeyListener keyboardListener;
 
+    private Render render;
+    private Menu menu;
+    private Playing playing;
+    private Settings settings;
+
+
     public Game(){
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);// frame in the middle of the screen
-
-        gameScreen = new GameScreen(this);
-
+        setResizable(false);
+        initClasses();
         add(gameScreen);
         pack(); //set size for the window to make sure nothing is hiding
-
         setVisible(true);
+    }
+
+    private void initClasses() {
+        render = new Render(this);
+        gameScreen = new GameScreen(this);
+        menu = new Menu(this);
+        playing = new Playing(this);
+        settings = new Settings(this);
     }
 
     private void initinput(){
@@ -54,7 +69,7 @@ public class Game extends JFrame implements Runnable {
         gameThread = new Thread(this){};
 
         gameThread.start();
-}
+    }
 
     private void callUPS() {
         if (System.currentTimeMillis() - lastTimeUPS >= 1000){
@@ -66,7 +81,6 @@ public class Game extends JFrame implements Runnable {
 
     private void updateGame() {
         updates++;
-
 //        System.out.println("Game updated");
     }
 
@@ -115,4 +129,22 @@ public class Game extends JFrame implements Runnable {
             }
         }
     }
+
+    public Render getRender(){
+        return render;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Playing getPlaying() {
+        return playing;
+    }
+
+    public Settings getSettings() {
+        return settings;
+    }
+
+
 }
